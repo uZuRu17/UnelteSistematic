@@ -1,7 +1,11 @@
 import fitz  # PyMuPDF
 import re
-import os
+import os, sys
 from concurrent.futures import ThreadPoolExecutor
+
+Author = "Alexandru Adrian MEROȘU"
+Contact = "alexandru.merosu@ancpi.ro"
+print(Contact)
 
 # Create folders if they don't exist
 folders = ['ExtracPlan', 'ExtrasCF']
@@ -34,7 +38,7 @@ def split_pdf_text(file_path, page_number):
 
     new_pdf = fitz.open()
     if text[:14] == 'Extras de Plan':
-        array_temporary[0]="Plan_Cadastral"
+        array_temporary[0]="ExtracPlan"
         for page_number in range(page_number, page_number + array_temporary[2]):
             new_pdf.insert_pdf(pdf_document, from_page=page_number, to_page=page_number)
         output_pdf_path = os.path.join(array_temporary[0], f"{array_temporary[1]}.pdf")
@@ -42,7 +46,7 @@ def split_pdf_text(file_path, page_number):
         new_pdf.save(output_pdf_path)
         new_pdf.close()
     elif len(text) > 10:
-        array_temporary[0] = "Carte_Funciara"
+        array_temporary[0] = "ExtrasCF"
         for page_number in range(page_number, page_number + array_temporary[2]):
             new_pdf.insert_pdf(pdf_document, from_page=page_number, to_page=page_number)
         output_pdf_path = os.path.join(array_temporary[0], f"{array_temporary[1]}.pdf")
@@ -76,7 +80,6 @@ def multisplit_pdfs_in_folder(folder_path):
 
 
 # Example usage:
-folder_path = r'C:\Users\user\Documents\DEV\SISCAD'
+folder_path = os.path.dirname(sys.executable)
+print(f"Adresa dosarului este: {os.path.dirname(sys.executable)}")
 pdf_files = multisplit_pdfs_in_folder(folder_path)
-
-#do_something = process_pages_with_condition(folder_path+r"\PrintJob.10005238860.PDF")
